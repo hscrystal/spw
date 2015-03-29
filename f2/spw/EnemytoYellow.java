@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class EnemytoYellow extends Enemy{
+	private int score = 100;
+
 	public  EnemytoYellow(int x, int y){
 		super(x,y);
 	}
@@ -18,5 +20,10 @@ public class EnemytoYellow extends Enemy{
 		}
 		g.setColor(Color.YELLOW);
 		g.fillRect(x, y, width, height);
+	}
+
+	@Override
+	public int getScore(){
+		return score;
 	}
 }

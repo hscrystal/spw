@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 public class Enemy extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
+	public int score;
 	
 	private int step = 12;
 	private boolean alive = true;
@@ -37,5 +38,9 @@ public class Enemy extends Sprite{
 	
 	public boolean isAlive(){
 		return alive;
+	}
+
+	public int getScore(){
+		return score;
 	}
 }
