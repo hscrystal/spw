@@ -7,6 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.net.URL;
 import java.io.File;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 
 public class SpaceShip extends Sprite{
 
@@ -16,7 +18,7 @@ public class SpaceShip extends Sprite{
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		try{
-			File url = new File("/home/server/study/OOP/spw/f2/spw/image/shipPng2.png");
+			File url = new File("./f2/spw/image/shipPng2.png");
 			image = ImageIO.read(url);
 		} catch(IOException e){
 			e.printStackTrace();
@@ -25,9 +27,14 @@ public class SpaceShip extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		// g.setColor(Color.GREEN);
-		// g.fillRect(x, y, width, height);
+		g.setColor(Color.GREEN);
+		g.fillRect(x, y, width, height);
 		g.drawImage(image, x, y,width, height,null);
+	}
+
+	@Override
+	public Double getRectangle() {
+		return new Rectangle2D.Double(x, y, width/2, height);
 	}
 
 	public void moveHorizontal(int direction){
@@ -45,5 +52,10 @@ public class SpaceShip extends Sprite{
 		if(y > 600 - height)
 			y = 600 - height;
 	}
+
+	// public void gun(Graphics2D gs){
+	// 	gs.setColor(Color.RED);
+	// 	gs.fillRect(x, y, 5, 10);
+	// }
 
 }

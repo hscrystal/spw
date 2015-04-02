@@ -77,8 +77,8 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		gp.updateGameUI(this);
 		
-		Rectangle2D.Double vr = v.getRectangle();
-		Rectangle2D.Double er;
+		Rectangle2D vr = v.getRectangle();
+		Rectangle2D er;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
@@ -109,6 +109,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
 			break;
+		// case KeyEvent.VK_SPACE:
+		// 	v.gun();
+		// 	break;
 		}
 	}
 
