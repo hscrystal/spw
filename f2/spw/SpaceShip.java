@@ -18,8 +18,7 @@ public class SpaceShip extends Sprite{
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		try{
-			File url = new File("./f2/spw/image/shipPng2.png");
-			image = ImageIO.read(url);
+			image = ImageIO.read(new File("./f2/spw/image/shipPng2.png"));
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -27,8 +26,8 @@ public class SpaceShip extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(x, y, width, height);
+		// g.setColor(Color.GREEN);
+		// g.fillRect(x, y, width, height);
 		g.drawImage(image, x, y,width, height,null);
 	}
 
@@ -52,10 +51,5 @@ public class SpaceShip extends Sprite{
 		if(y > 600 - height)
 			y = 600 - height;
 	}
-
-	// public void gun(Graphics2D gs){
-	// 	gs.setColor(Color.RED);
-	// 	gs.fillRect(x, y, 5, 10);
-	// }
 
 }

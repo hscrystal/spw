@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import java.net.URL;
 import java.io.File;
 
 public class EnemytoYellow extends Enemy{
@@ -16,8 +15,7 @@ public class EnemytoYellow extends Enemy{
 	public  EnemytoYellow(int x, int y){
 		super(x,y);
 		try{
-			File url = new File("./f2/spw/image/alien2.png");
-			image = ImageIO.read(url);
+			image = ImageIO.read(new File("./f2/spw/image/alien2.png"));
 		} catch(IOException e){
 			e.printStackTrace();
 		}
