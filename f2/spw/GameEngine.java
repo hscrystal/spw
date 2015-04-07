@@ -21,7 +21,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private Timer timer;
 	
 	private long score = 0;
-	private double difficulty = 0.1;
+	private double difficulty = 0.05;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -63,13 +63,26 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	private void process(){
+		generateEnemy();
+		moveEnemy();
+		moveBullet();
+		
+		gp.updateGameUI(this);
+		
+		bulletHit();
+		shipHit();
+	}
+
+	public void generateEnemy(){
 		if(Math.random() < difficulty){
 			if(Math.random()*1 > 0.5)
 				generateEnemyRed();
 			else
 				generateEnemyYellow();
 		}
+	}
 
+	public void moveEnemy(){
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
@@ -78,10 +91,12 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += e.getScore();
+				// score += e.getScore();
 			}
 		}
+	}
 
+	public void moveBullet(){
 		Iterator<Bullet> b_iter = bullets.iterator();
 		while(b_iter.hasNext()){
 			Bullet b = b_iter.next();
@@ -92,16 +107,42 @@ public class GameEngine implements KeyListener, GameReporter{
 				gp.sprites.remove(b);
 			}
 		}
-		
-		gp.updateGameUI(this);
-		
+	}
+
+	public void shipHit(){
 		Rectangle2D vr = v.getRectangle();
-		Rectangle2D er;
-		for(Enemy e : enemies){
-			er = e.getRectangle();
+		Iterator<Enemy> e_iter = enemies.iterator();
+		while(e_iter.hasNext()){
+			Enemy e = e_iter.next();
+			Rectangle2D er = e.getRectangle();
 			if(er.intersects(vr)){
 				die();
 				return;
+			}
+		}
+	}
+
+	public void bulletHit(){
+		// Iterator<Bullet> b_iter = bullets.iterator();
+		// Iterator<Enemy> e_iter = enemies.iterator();
+		// while(b_iter.hasNext()){
+		for(Iterator<Bullet> b_iter = bullets.iterator(); b_iter.hasNext(); ){
+			Bullet b = b_iter.next();
+			Rectangle2D.Double br = b.getRectangle();
+			// while(e_iter.hasNext()){
+			for(Iterator<Enemy> e_iter = enemies.iterator(); e_iter.hasNext();){
+				Enemy e = e_iter.next();
+				Rectangle2D.Double er = e.getRectangle();
+				if(er.intersects(br)){
+					b_iter.remove();
+					gp.sprites.remove(b);
+					e_iter.remove();
+					gp.sprites.remove(e);
+					score += e.getScore();
+					e.die();
+					b.die();
+					break;
+				}
 			}
 		}
 	}

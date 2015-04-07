@@ -18,7 +18,8 @@ public class Bullet extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.RED);
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+		g.setColor(Color.ORANGE);
 		g.fillRect(x+((s.width/2)-(width/2)), y, width, height);
 		
 	}
@@ -26,12 +27,16 @@ public class Bullet extends Sprite{
 	public void proceed(){
 		y -= step;
 		if(y < Y_TO_DIE){
-			alive = false;
+			die();
 		}
 	}
 	
 	public boolean isAlive(){
 		return alive;
 	}
+
+	public void die(){
+  		alive = false;
+  	}
 
 }
