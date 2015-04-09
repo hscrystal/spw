@@ -43,6 +43,15 @@ public class GameEngine implements KeyListener, GameReporter{
 	public void start(){
 		timer.start();
 	}
+
+	public void generateEnemy(){
+		if(Math.random() < difficulty){
+			if(Math.random()*1 > 0.5)
+				generateEnemyRed();
+			else
+				generateEnemyYellow();
+		}
+	}
 	
 	private void generateEnemyRed(){
 		EnemytoRed e = new EnemytoRed((int)(Math.random()*390), 30);
@@ -71,15 +80,6 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		bulletHit();
 		shipHit();
-	}
-
-	public void generateEnemy(){
-		if(Math.random() < difficulty){
-			if(Math.random()*1 > 0.5)
-				generateEnemyRed();
-			else
-				generateEnemyYellow();
-		}
 	}
 
 	public void moveEnemy(){
@@ -123,26 +123,19 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	public void bulletHit(){
-		// Iterator<Bullet> b_iter = bullets.iterator();
-		// Iterator<Enemy> e_iter = enemies.iterator();
-		// while(b_iter.hasNext()){
-		for(Iterator<Bullet> b_iter = bullets.iterator(); b_iter.hasNext(); ){
-			Bullet b = b_iter.next();
-			Rectangle2D.Double br = b.getRectangle();
-			// while(e_iter.hasNext()){
-			for(Iterator<Enemy> e_iter = enemies.iterator(); e_iter.hasNext();){
-				Enemy e = e_iter.next();
-				Rectangle2D.Double er = e.getRectangle();
+		Iterator<Bullet> b_iter = bullets.iterator();
+		Iterator<Enemy> e_iter = enemies.iterator();
+		Rectangle2D.Double er;
+		Rectangle2D.Double br;
+		for(Enemy e : enemies){
+			er = e.getRectangle();
+			for (Bullet b : bullets ) {
+				br = b.getRectangle();
 				if(er.intersects(br)){
-					b_iter.remove();
-					gp.sprites.remove(b);
-					e_iter.remove();
-					gp.sprites.remove(e);
 					score += e.getScore();
 					e.die();
 					b.die();
-					break;
-				}
+				}		
 			}
 		}
 	}

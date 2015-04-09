@@ -28,8 +28,8 @@ public class EnemytoYellow extends Enemy{
 		else{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
-		g.setColor(Color.YELLOW);
-		g.fillRect(x, y, width, height);
+		// g.setColor(Color.YELLOW);
+		// g.fillRect(x, y, width, height);
 		g.drawImage(image, x, y,width, height,null);
 	}
 
