@@ -21,12 +21,17 @@ public class GameEngine implements KeyListener, GameReporter{
 	private Timer timer;
 	
 	private long score = 0;
+	private int heart;
+	private int level;
+	private	int upLeval = 500;
 	private double difficulty = 0.05;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
-		this.v = v;		
-		
+		this.v = v;
+		this.heart = 5;
+		this.level = 1;
+
 		gp.sprites.add(v);
 		
 		timer = new Timer(50, new ActionListener() {
@@ -78,6 +83,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		gp.updateGameUI(this);
 		
+		checkLevel();
 		bulletHit();
 		shipHit();
 	}
@@ -116,8 +122,15 @@ public class GameEngine implements KeyListener, GameReporter{
 			Enemy e = e_iter.next();
 			Rectangle2D er = e.getRectangle();
 			if(er.intersects(vr)){
-				die();
-				return;
+				if(heart == 0){
+					die();
+					return;
+				}	
+				else {
+					e_iter.remove();
+					gp.sprites.remove(e);
+					heart --;
+				}
 			}
 		}
 	}
@@ -137,6 +150,15 @@ public class GameEngine implements KeyListener, GameReporter{
 					b.die();
 				}		
 			}
+		}
+	}
+
+	public void checkLevel(){
+		if(score > upLeval){
+			upLeval += 500;
+			level++;
+			difficulty += 0.1;
+			System.out.println(level);
 		}
 	}
 	
@@ -169,6 +191,14 @@ public class GameEngine implements KeyListener, GameReporter{
 
 	public long getScore(){
 		return score;
+	}
+
+	public int getHeart(){
+		return heart;
+	}
+
+	public int getLevel(){
+		return level;
 	}
 	
 	@Override

@@ -15,7 +15,8 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
 	
 	private BufferedImage bi;
-	Image image = null;	
+	private Image image = null;	
+	private Image heart = null;
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
@@ -25,6 +26,7 @@ public class GamePanel extends JPanel {
 		//big.setBackground(Color.BLACK);
 		try{
 			image = ImageIO.read(new File("./f2/spw/image/bg.jpg"));
+			heart = ImageIO.read(new File("./f2/spw/image/heart.png"));
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -36,6 +38,8 @@ public class GamePanel extends JPanel {
 		big.drawImage(image, 0, 0, null);
 		big.setColor(Color.WHITE);		
 		big.drawString(String.format("Score : "+"%06d", reporter.getScore()), 285, 20);
+		drawHeart(reporter.getHeart());
+		drawLevel(reporter.getLevel());
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
@@ -47,6 +51,21 @@ public class GamePanel extends JPanel {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(bi, null, 0, 0);
+	}
+
+	public void drawHeart(int numheart){
+		big.setColor(Color.WHITE);
+		big.drawString(String.format("Heart : "), 5, 20);
+		int x = 50;
+		for(int i=0; i < numheart ; i++){
+			big.drawImage(heart, x , 8, null);
+			x += 20;
+		}
+	}
+
+	public void drawLevel(int level){
+		big.setColor(Color.WHITE);
+		big.drawString(String.format("Level : "+"%02d",level), 5, 50);
 	}
 
 }
