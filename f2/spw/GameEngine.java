@@ -16,13 +16,15 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	private SpaceShip v;	
+	private SpaceShip v;
+	private ModifyScore s = new ModifyScore();
 	
 	private Timer timer;
 	
 	private long score = 0;
 	private int heart;
 	private int level;
+	private long highScore = Long.parseLong(s.getScore());
 	private	int upLeval = 500;
 	private double difficulty = 0.05;
 	
@@ -123,12 +125,14 @@ public class GameEngine implements KeyListener, GameReporter{
 			Rectangle2D er = e.getRectangle();
 			if(er.intersects(vr)){
 				if(heart == 0){
+					if(score > highScore){
+						s.setScore(score);
+					}
 					die();
 					return;
 				}	
 				else {
-					e_iter.remove();
-					gp.sprites.remove(e);
+					e.die();
 					heart --;
 				}
 			}
@@ -199,6 +203,14 @@ public class GameEngine implements KeyListener, GameReporter{
 
 	public int getLevel(){
 		return level;
+	}
+
+	public long getHighScore(){
+		if(highScore > score){
+			return highScore;
+		}else {
+			return score;
+		}
 	}
 	
 	@Override

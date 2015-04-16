@@ -36,8 +36,9 @@ public class GamePanel extends JPanel {
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 400, 600);
 		big.drawImage(image, 0, 0, null);
-		big.setColor(Color.WHITE);		
-		big.drawString(String.format("Score : "+"%06d", reporter.getScore()), 285, 20);
+		big.setColor(Color.WHITE);
+		big.drawString(String.format("High Score : "+"%06d", reporter.getHighScore()), 265, 20);		
+		big.drawString(String.format("Score : "+"%06d", reporter.getScore()), 265, 50);
 		drawHeart(reporter.getHeart());
 		drawLevel(reporter.getLevel());
 		for(Sprite s : sprites){
@@ -67,5 +68,4 @@ public class GamePanel extends JPanel {
 		big.setColor(Color.WHITE);
 		big.drawString(String.format("Level : "+"%02d",level), 5, 50);
 	}
-
 }
