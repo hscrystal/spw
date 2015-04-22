@@ -16,6 +16,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	private ArrayList<Item> items = new ArrayList<Item>();
 	private SpaceShip v;
 	private ModifyScore s = new ModifyScore();
 	
@@ -78,15 +79,38 @@ public class GameEngine implements KeyListener, GameReporter{
 		bullets.add(b);
 	}
 
+	private void generateItem(){
+		if(Math.random() < 0.01)
+			if(Math.random()*1 > 0.5)
+				generateItemArmor();
+			else
+				generateItemHeart();
+	}
+
+	private void generateItemArmor(){
+		ItemArmor it = new ItemArmor((int)(Math.random()*390), 30);
+		gp.sprites.add(it);
+		items.add(it);
+	}
+
+	private void generateItemHeart(){
+		ItemHeart it = new ItemHeart((int)(Math.random()*390), 30);
+		gp.sprites.add(it);
+		items.add(it);
+	}
+
 	private void process(){
 		generateEnemy();
+		generateItem();
 		moveEnemy();
+		moveItem();
 		moveBullet();
 		
 		gp.updateGameUI(this);
 		
 		checkLevel();
 		bulletHit();
+		itemHit();
 		shipHit();
 	}
 
@@ -99,7 +123,19 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				// score += e.getScore();
+			}
+		}
+	}
+
+	public void moveItem(){
+		Iterator<Item> it_iter = items.iterator();
+		while(it_iter.hasNext()){
+			Item it = it_iter.next();
+			it.proceed();
+			
+			if(!it.isAlive()){
+				it_iter.remove();
+				gp.sprites.remove(it);
 			}
 		}
 	}
@@ -153,6 +189,19 @@ public class GameEngine implements KeyListener, GameReporter{
 					e.die();
 					b.die();
 				}		
+			}
+		}
+	}
+
+	public void itemHit(){
+		Rectangle2D vr = v.getRectangle();
+		Iterator<Item> it_iter = items.iterator();
+		while(it_iter.hasNext()){
+			Item it = it_iter.next();
+			Rectangle2D itr = it.getRectangle();
+			if(itr.intersects(vr)){
+				heart++;
+				it.die();
 			}
 		}
 	}
