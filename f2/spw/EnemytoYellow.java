@@ -9,12 +9,10 @@ import javax.imageio.ImageIO;
 import java.io.File;
 
 public class EnemytoYellow extends Enemy{
-	private int score;
 	Image image = null;
 
 	public  EnemytoYellow(int x, int y){
-		super(x,y);
-		score = 10;
+		super(x,y,10);
 		try{
 			image = ImageIO.read(new File("./f2/spw/image/alien2.png"));
 		} catch(IOException e){
@@ -34,8 +32,4 @@ public class EnemytoYellow extends Enemy{
 		g.drawImage(image, x, y,width, height,null);
 	}
 
-	@Override
-	public int getScore(){
-		return score;
-	}
 }

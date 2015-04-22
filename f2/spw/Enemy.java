@@ -12,9 +12,9 @@ public class Enemy extends Sprite{
 	private int step = 4;
 	private boolean alive = true;
 	
-	public Enemy(int x, int y) {
+	public Enemy(int x, int y,int score) {
 		super(x, y, 20, 20);
-		
+		this.score = score;
 	}
 
 	@Override

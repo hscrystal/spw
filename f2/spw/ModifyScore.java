@@ -33,7 +33,7 @@ public class ModifyScore{
 		if(score != null){
 			return score;
 		}else {
-			return "error";
+			return "0";
 		}
 	}
 
