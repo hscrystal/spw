@@ -12,8 +12,9 @@ import java.awt.geom.Rectangle2D.Double;
 
 public class SpaceShip extends Sprite{
 
-	int step = 8;
-	Image image = null;
+	private int step = 8;
+	private Image image = null;
+	private boolean shield = false;
 	
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -26,8 +27,8 @@ public class SpaceShip extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		// g.setColor(Color.GREEN);
-		// g.fillRect(x, y, width, height);
+		g.setColor(Color.BLUE);
+		g.drawOval(x-((height/2)/2),y,height,height);
 		g.drawImage(image, x, y,width, height,null);
 	}
 

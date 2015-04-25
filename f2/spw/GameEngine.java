@@ -28,6 +28,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private long highScore = Long.parseLong(s.getScore());
 	private	int upLeval = 500;
 	private double difficulty = 0.05;
+	private boolean enableItem = true;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -80,11 +81,13 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	private void generateItem(){
-		if(Math.random() < 0.01)
+		if(Math.random() < 0.1 && enableItem == true){
 			if(Math.random()*1 > 0.5)
 				generateItemArmor();
 			else
 				generateItemHeart();
+			enableItem = false;
+		}
 	}
 
 	private void generateItemArmor(){
@@ -107,6 +110,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		moveBullet();
 		
 		gp.updateGameUI(this);
+		System.out.println(enableItem);
 		
 		checkLevel();
 		bulletHit();
@@ -136,6 +140,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!it.isAlive()){
 				it_iter.remove();
 				gp.sprites.remove(it);
+				enableItem = true;
 			}
 		}
 	}
@@ -200,8 +205,13 @@ public class GameEngine implements KeyListener, GameReporter{
 			Item it = it_iter.next();
 			Rectangle2D itr = it.getRectangle();
 			if(itr.intersects(vr)){
-				heart++;
-				it.die();
+				if(it instanceof ItemHeart){
+					heart++;
+					it.die();
+				}
+				if(it instanceof ItemArmor){
+					it.die();
+				}
 			}
 		}
 	}
