@@ -18,7 +18,6 @@ public class Bullet extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		g.setColor(Color.ORANGE);
 		g.fillRect(x, y, width, height);
 		

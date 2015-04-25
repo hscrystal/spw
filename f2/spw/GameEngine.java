@@ -110,7 +110,6 @@ public class GameEngine implements KeyListener, GameReporter{
 		moveBullet();
 		
 		gp.updateGameUI(this);
-		System.out.println(enableItem);
 		
 		checkLevel();
 		bulletHit();
