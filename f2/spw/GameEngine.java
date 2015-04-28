@@ -17,8 +17,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Shield> shields = new ArrayList<Shield>();
 	private SpaceShip v;
 	private ModifyScore s = new ModifyScore();
+	// private Shield sh;
 	
 	private Timer timer;
 	
@@ -29,6 +31,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	private	int upLeval = 500;
 	private double difficulty = 0.05;
 	private boolean enableItem = true;
+	private boolean enableshield = true;
+
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -82,10 +86,16 @@ public class GameEngine implements KeyListener, GameReporter{
 
 	private void generateItem(){
 		if(Math.random() < 0.1 && enableItem == true){
-			if(Math.random()*1 > 0.5)
-				generateItemArmor();
-			else
+			if(Math.random()*1 > 0.5){
+				// if(enableshield){
+					generateItemArmor();
+					// timeShield();
+					// enableshield = false;
+				// }
+			}
+			else{
 				generateItemHeart();
+			}
 			enableItem = false;
 		}
 	}
@@ -102,16 +112,26 @@ public class GameEngine implements KeyListener, GameReporter{
 		items.add(it);
 	}
 
+	private void generateShield(){
+		Shield sh = new Shield(v);
+		gp.sprites.add(sh);
+		shields.add(sh);
+	}
+
 	private void process(){
 		generateEnemy();
 		generateItem();
 		moveEnemy();
 		moveItem();
 		moveBullet();
+		moveShield();
 		
 		gp.updateGameUI(this);
+		System.out.println(enableItem);
+
 		
 		checkLevel();
+		shieldHit();
 		bulletHit();
 		itemHit();
 		shipHit();
@@ -142,6 +162,18 @@ public class GameEngine implements KeyListener, GameReporter{
 				enableItem = true;
 			}
 		}
+	}
+
+	public void moveShield(){
+		Iterator<Shield> sh_iter = shields.iterator();
+		while(sh_iter.hasNext()){
+			Shield sh = sh_iter.next();
+			sh.proceed(v);
+			if(!sh.isAlive()){
+				gp.sprites.remove(sh);
+			}
+		}	
+
 	}
 
 	public void moveBullet(){
@@ -179,9 +211,22 @@ public class GameEngine implements KeyListener, GameReporter{
 		}
 	}
 
+	public void shieldHit(){
+		Rectangle2D.Double er;
+		Rectangle2D.Double sr;
+		for(Enemy e : enemies){
+			er = e.getRectangle();
+			for (Shield sh : shields ) {
+				sr = sh.getRectangle();
+				if(er.intersects(sr)){
+					score += e.getScore();
+					e.die();
+				}		
+			}
+		}
+	}
+
 	public void bulletHit(){
-		Iterator<Bullet> b_iter = bullets.iterator();
-		Iterator<Enemy> e_iter = enemies.iterator();
 		Rectangle2D.Double er;
 		Rectangle2D.Double br;
 		for(Enemy e : enemies){
@@ -209,6 +254,7 @@ public class GameEngine implements KeyListener, GameReporter{
 					it.die();
 				}
 				if(it instanceof ItemArmor){
+					generateShield();
 					it.die();
 				}
 			}
@@ -222,6 +268,15 @@ public class GameEngine implements KeyListener, GameReporter{
 			difficulty += 0.1;
 			System.out.println(level);
 		}
+	}
+
+	private void timeShield(){
+		try{
+			Thread.sleep(50000);
+		}catch(InterruptedException e){
+			System.out.println("Oh.");
+		}
+		enableshield = true;
 	}
 	
 	public void die(){
