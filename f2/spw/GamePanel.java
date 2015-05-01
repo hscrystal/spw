@@ -30,7 +30,6 @@ public class GamePanel extends JPanel {
 		} catch(IOException e){
 			e.printStackTrace();
 		}
-		big.drawImage(image, 0, 0, null);
 	}
 
 	public void updateGameUI(GameReporter reporter){
@@ -47,6 +46,19 @@ public class GamePanel extends JPanel {
 		
 		repaint();
 	}
+
+	public void updateGameUI2(GameReporter reporter){
+		big.clearRect(0, 0, 400, 600);
+		big.drawImage(image, 0, 0, null);
+		big.setColor(Color.WHITE);
+		big.drawString(String.format("Press S to Strart Game"), 130, 300);		
+		for(Sprite s : sprites){
+			s.draw(big);
+		}
+		
+		repaint();
+	}
+
 
 	@Override
 	public void paint(Graphics g) {

@@ -31,7 +31,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	private	int upLeval = 500;
 	private double difficulty = 0.05;
 	private boolean enableItem = true;
-	private boolean enableshield = true;
+	private Boolean shield_active = false;
+	private long shield_duration = 0;	
+	private int counter = 0;
+	private int sec = 0;
 
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
@@ -43,18 +46,47 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(v);
 		
 		timer = new Timer(50, new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				process();
 			}
 		});
 		timer.setRepeats(true);
-		
+		gp.updateGameUI2(this);
 	}
 	
 	public void start(){
 		timer.start();
+	}
+
+	private void process(){
+		generateEnemy();
+		generateItem();
+		moveEnemy();
+		moveItem();
+		moveBullet();
+		moveShield();
+		time();
+		
+		gp.updateGameUI(this);
+		//System.out.println(enableItem);
+
+		
+		checkLevel();
+		shieldHit();
+		bulletHit();
+		itemHit();
+		shipHit();
+	}
+
+	public void time(){
+		counter++;
+		if(counter == 20){
+			counter = 0;
+			sec ++;
+			sec %= 60;
+			System.out.println(sec);
+		}
 	}
 
 	public void generateEnemy(){
@@ -87,11 +119,11 @@ public class GameEngine implements KeyListener, GameReporter{
 	private void generateItem(){
 		if(Math.random() < 0.1 && enableItem == true){
 			if(Math.random()*1 > 0.5){
-				// if(enableshield){
+				if(!shield_active){
 					generateItemArmor();
-					// timeShield();
-					// enableshield = false;
-				// }
+					shield_duration = System.currentTimeMillis() + 10000;
+					shield_active = true;
+				}
 			}
 			else{
 				generateItemHeart();
@@ -116,25 +148,6 @@ public class GameEngine implements KeyListener, GameReporter{
 		Shield sh = new Shield(v);
 		gp.sprites.add(sh);
 		shields.add(sh);
-	}
-
-	private void process(){
-		generateEnemy();
-		generateItem();
-		moveEnemy();
-		moveItem();
-		moveBullet();
-		moveShield();
-		
-		gp.updateGameUI(this);
-		System.out.println(enableItem);
-
-		
-		checkLevel();
-		shieldHit();
-		bulletHit();
-		itemHit();
-		shipHit();
 	}
 
 	public void moveEnemy(){
@@ -169,10 +182,20 @@ public class GameEngine implements KeyListener, GameReporter{
 		while(sh_iter.hasNext()){
 			Shield sh = sh_iter.next();
 			sh.proceed(v);
-			if(!sh.isAlive()){
+			// if(!sh.isAlive()){
+			// 	gp.sprites.remove(sh);
+			// }
+			if(((shield_duration - System.currentTimeMillis()) < 0) && shield_active){
+				sh_iter.remove();
 				gp.sprites.remove(sh);
+				sh.die();
+				shield_active = false;
 			}
 		}	
+		// if(((immortal_duration - System.currentTimeMillis()) < 0) && immortal_active){
+		// 	sh.die();
+		// 	immortal_active = false;
+		// }
 
 	}
 
@@ -250,7 +273,9 @@ public class GameEngine implements KeyListener, GameReporter{
 			Rectangle2D itr = it.getRectangle();
 			if(itr.intersects(vr)){
 				if(it instanceof ItemHeart){
-					heart++;
+					if(heart < 5){
+						heart++;
+					}
 					it.die();
 				}
 				if(it instanceof ItemArmor){
@@ -268,15 +293,6 @@ public class GameEngine implements KeyListener, GameReporter{
 			difficulty += 0.1;
 			System.out.println(level);
 		}
-	}
-
-	private void timeShield(){
-		try{
-			Thread.sleep(50000);
-		}catch(InterruptedException e){
-			System.out.println("Oh.");
-		}
-		enableshield = true;
 	}
 	
 	public void die(){
@@ -303,7 +319,13 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_SPACE:
 			generatebullet();
 			break;
+		case KeyEvent.VK_S:
+			start();
+			break;
 		}
+		
+
+
 	}
 
 	public long getScore(){

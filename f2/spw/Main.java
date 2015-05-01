@@ -18,6 +18,6 @@ public class Main {
 		frame.getContentPane().add(gp, BorderLayout.CENTER);
 		frame.setVisible(true);
 		
-		engine.start();
+		//engine.start();
 	}
 }
