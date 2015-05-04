@@ -25,7 +25,6 @@ public class GameEngine implements KeyListener, GameReporter{
 	private Timer timer;
 	
 	private long score = 0;
-	private int heart;
 	private int level;
 	private long highScore = Long.parseLong(s.getScore());
 	private	int upLeval = 500;
@@ -33,14 +32,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	private boolean enableItem = true;
 	private Boolean shield_active = false;
 	private long shield_duration = 0;	
-	private int counter = 0;
-	private int sec = 0;
-
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
 		this.v = v;
-		this.heart = 5;
 		this.level = 1;
 
 		gp.sprites.add(v);
@@ -59,6 +54,31 @@ public class GameEngine implements KeyListener, GameReporter{
 		timer.start();
 	}
 
+	public void stop(){
+		timer.stop();
+	}
+
+	public void restart(){
+		timer.stop();
+		for(Enemy e : enemies) {
+			e.die();
+		}
+		for(Item it : items) {
+			it.die();
+		}
+		for(Bullet b : bullets) {
+			b.die();
+		}
+		for(Shield s : shields) {
+			s.die();
+		}
+		v.resetHeart();
+		level = 1;
+		score = 0;
+		v.resetPosition();
+		timer.restart();
+	}
+
 	private void process(){
 		generateEnemy();
 		generateItem();
@@ -66,10 +86,10 @@ public class GameEngine implements KeyListener, GameReporter{
 		moveItem();
 		moveBullet();
 		moveShield();
-		time();
+		// time();
 		
 		gp.updateGameUI(this);
-		//System.out.println(enableItem);
+		// System.out.println(enableItem);
 
 		
 		checkLevel();
@@ -79,15 +99,14 @@ public class GameEngine implements KeyListener, GameReporter{
 		shipHit();
 	}
 
-	public void time(){
-		counter++;
-		if(counter == 20){
-			counter = 0;
-			sec ++;
-			sec %= 60;
-			System.out.println(sec);
-		}
-	}
+	// public void time(){
+	// 	counter++;
+	// 	if(counter == 20){
+	// 		counter = 0;
+	// 		sec ++;
+	// 		sec %= 60;
+	// 	}
+	// }
 
 	public void generateEnemy(){
 		if(Math.random() < difficulty){
@@ -121,7 +140,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(Math.random()*1 > 0.5){
 				if(!shield_active){
 					generateItemArmor();
-					shield_duration = System.currentTimeMillis() + 10000;
+					shield_duration = System.currentTimeMillis() + 20000;
 					shield_active = true;
 				}
 			}
@@ -182,9 +201,6 @@ public class GameEngine implements KeyListener, GameReporter{
 		while(sh_iter.hasNext()){
 			Shield sh = sh_iter.next();
 			sh.proceed(v);
-			// if(!sh.isAlive()){
-			// 	gp.sprites.remove(sh);
-			// }
 			if(((shield_duration - System.currentTimeMillis()) < 0) && shield_active){
 				sh_iter.remove();
 				gp.sprites.remove(sh);
@@ -219,7 +235,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			Enemy e = e_iter.next();
 			Rectangle2D er = e.getRectangle();
 			if(er.intersects(vr)){
-				if(heart == 0){
+				if(v.getHeart() == 0){
 					if(score > highScore){
 						s.setScore(score);
 					}
@@ -228,7 +244,7 @@ public class GameEngine implements KeyListener, GameReporter{
 				}	
 				else {
 					e.die();
-					heart --;
+					v.removeHeart();
 				}
 			}
 		}
@@ -273,8 +289,8 @@ public class GameEngine implements KeyListener, GameReporter{
 			Rectangle2D itr = it.getRectangle();
 			if(itr.intersects(vr)){
 				if(it instanceof ItemHeart){
-					if(heart < 5){
-						heart++;
+					if(getHeart() < 5){
+						v.addHeart();
 					}
 					it.die();
 				}
@@ -319,9 +335,6 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_SPACE:
 			generatebullet();
 			break;
-		case KeyEvent.VK_S:
-			start();
-			break;
 		}
 		
 
@@ -333,7 +346,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	public int getHeart(){
-		return heart;
+		return v.getHeart();
 	}
 
 	public int getLevel(){

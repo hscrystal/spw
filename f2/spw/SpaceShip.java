@@ -14,9 +14,15 @@ public class SpaceShip extends Sprite{
 
 	private int step = 8;
 	private Image image = null;
+	private int heart;
+	private int setX;
+	private int setY;
 	
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		setX = x;
+		setY = y;
+		heart = 5;
 		try{
 			image = ImageIO.read(new File("./f2/spw/image/shipPng2.png"));
 		} catch(IOException e){
@@ -50,6 +56,28 @@ public class SpaceShip extends Sprite{
 			y = 0;
 		if(y > 600 - height)
 			y = 600 - height;
+	}
+
+	public int getHeart(){
+		return heart;
+	}
+
+	public void addHeart(){
+		heart++;
+	}
+
+	public void removeHeart(){
+		heart--;
+	}
+
+
+	public void resetHeart(){
+		heart = 5;
+	}
+
+	public void resetPosition(){
+		x = setX;
+		y = setY;
 	}
 
 }

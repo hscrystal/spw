@@ -21,7 +21,8 @@ public class GamePanel extends JPanel {
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
 	public GamePanel() {
-		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
+		bi = new BufferedImage(420, 600, BufferedImage.TYPE_INT_ARGB);
+		//this.setFocusable(true);
 		big = (Graphics2D) bi.getGraphics();
 		//big.setBackground(Color.BLACK);
 		try{
@@ -36,8 +37,8 @@ public class GamePanel extends JPanel {
 		big.clearRect(0, 0, 400, 600);
 		big.drawImage(image, 0, 0, null);
 		big.setColor(Color.WHITE);
-		big.drawString(String.format("High Score : "+"%06d", reporter.getHighScore()), 265, 20);		
-		big.drawString(String.format("Score : "+"%06d", reporter.getScore()), 265, 50);
+		big.drawString(String.format("High Score : "+"%06d", reporter.getHighScore()), 270, 20);		
+		big.drawString(String.format("Score : "+"%06d", reporter.getScore()), 270, 50);
 		drawHeart(reporter.getHeart());
 		drawLevel(reporter.getLevel());
 		for(Sprite s : sprites){
@@ -51,7 +52,8 @@ public class GamePanel extends JPanel {
 		big.clearRect(0, 0, 400, 600);
 		big.drawImage(image, 0, 0, null);
 		big.setColor(Color.WHITE);
-		big.drawString(String.format("Press S to Strart Game"), 130, 300);		
+		
+		big.drawString(String.format("Click Start to Strart Game"), 130, 300);		
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
