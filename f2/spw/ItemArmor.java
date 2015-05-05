@@ -22,11 +22,6 @@ public class ItemArmor extends Item {
 
 	@Override
 	public void draw(Graphics2D g){
-		if(y < Y_TO_FADE)
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-		else{
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
-		}
 		g.drawImage(image, x, y,width, height,null);
 	}
 

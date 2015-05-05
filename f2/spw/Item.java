@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Item extends Sprite{
-	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
 	
 	private int step = 4;
