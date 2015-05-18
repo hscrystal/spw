@@ -32,14 +32,12 @@ public class SpaceShip extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.BLUE);
-		// g.drawOval(x-((height/2)/2),y,height,height);
 		g.drawImage(image, x, y,width, height,null);
 	}
 
 	@Override
 	public Double getRectangle() {
-		return new Rectangle2D.Double(x, y, width/2, height);
+		return new Rectangle2D.Double(x, y, width, height);
 	}
 
 	public void moveHorizontal(int direction){

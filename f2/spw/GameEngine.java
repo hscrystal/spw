@@ -20,7 +20,6 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Shield> shields = new ArrayList<Shield>();
 	private SpaceShip v;
 	private ModifyScore s = new ModifyScore();
-	// private Shield sh;
 	
 	private Timer timer;
 	
@@ -142,12 +141,13 @@ public class GameEngine implements KeyListener, GameReporter{
 					generateItemArmor();
 					shield_duration = System.currentTimeMillis() + 20000;
 					shield_active = true;
+					enableItem = false;
 				}
 			}
 			else{
 				generateItemHeart();
+				enableItem = false;
 			}
-			enableItem = false;
 		}
 	}
 
@@ -208,11 +208,6 @@ public class GameEngine implements KeyListener, GameReporter{
 				shield_active = false;
 			}
 		}	
-		// if(((immortal_duration - System.currentTimeMillis()) < 0) && immortal_active){
-		// 	sh.die();
-		// 	immortal_active = false;
-		// }
-
 	}
 
 	public void moveBullet(){
@@ -235,6 +230,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			Enemy e = e_iter.next();
 			Rectangle2D er = e.getRectangle();
 			if(er.intersects(vr)){
+				System.out.println("hit");
 				if(v.getHeart() == 0){
 					if(score > highScore){
 						s.setScore(score);
@@ -258,7 +254,6 @@ public class GameEngine implements KeyListener, GameReporter{
 			for (Shield sh : shields ) {
 				sr = sh.getRectangle();
 				if(er.intersects(sr)){
-					score += e.getScore();
 					e.die();
 				}		
 			}
